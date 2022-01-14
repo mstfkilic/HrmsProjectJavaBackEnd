@@ -29,9 +29,6 @@ public class UsersController {
 	public DataResult<List<User>>getAll(){
 		return this.userService.getAll();
 	}
-	@PostMapping("/add")
-	public Result add(User user) {
-		return this.userService.add(user);
-	}
+	
 }
 

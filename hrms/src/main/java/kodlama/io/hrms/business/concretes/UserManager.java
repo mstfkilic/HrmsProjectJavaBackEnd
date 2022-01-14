@@ -31,12 +31,7 @@ public class UserManager implements UserService{
 		return new SuccessDataResult<List<User>>(this.userDao.findAll(),"All users are listed.");
 	}
 
-	@Override
-	public Result add(User user) {
-		// TODO Auto-generated method stub
-		this.userDao.save(user);
-		return new SuccessResult("User are added to system");
-	}
+	
 
 	
 	
