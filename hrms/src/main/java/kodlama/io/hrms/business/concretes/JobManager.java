@@ -33,7 +33,7 @@ public class JobManager implements JobService {
 	}
 	
 	public Result isPositonNameExist(String positionName) {
-		if(jobDao.findByPositionName(positionName)!= null) {
+		if(jobDao.findByPositionName(positionName)== null) {
 			return new ErrorResult();
 		}
 		return new SuccessResult();
