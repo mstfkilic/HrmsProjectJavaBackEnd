@@ -10,9 +10,9 @@ import kodlama.io.hrms.entities.concretes.Employer;
 @Repository
 public interface EmployerDao extends JpaRepository<Employer,Integer> {
 	
-	List<Employer>findByEmail(String email);
-	List<Employer>findByEmailIgnoreCase(String email);
-	List<Employer>findByWebAddressIgnoreCase(String webAddress);
-	List<Employer>findEmployerById(int id);
-	List<Employer>findEmployerByCompanyName(String companyName);
+	List<Employer>getByEmail(String email);
+	List<Employer>getByEmailIgnoreCase(String email);
+	List<Employer>getByWebAddressIgnoreCase(String webAddress);
+	List<Employer>getEmployerById(int id);
+	List<Employer>getEmployerByCompanyName(String companyName);
 }

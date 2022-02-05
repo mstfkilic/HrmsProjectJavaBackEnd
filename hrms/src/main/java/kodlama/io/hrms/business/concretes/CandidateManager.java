@@ -16,6 +16,7 @@ import kodlama.io.hrms.core.verifications.abstracts.EmailVerificationsService;
 import kodlama.io.hrms.dataAccess.abstracts.CandidateDao;
 import kodlama.io.hrms.entities.concretes.Candidate;
 import kodlama.io.hrms.entities.concretes.User;
+import kodlama.io.hrms.entities.concretes.Dtos.CandidateDtoForRegister;
 
 @Service
 public class CandidateManager implements CandidateService {
@@ -38,41 +39,101 @@ public class CandidateManager implements CandidateService {
 	}
 	
 	public Result isMailExist(String email) {
-		if(this.candidateDao.findByEmail(email)!=null) {
+		if(this.candidateDao.getByEmail(email)!=null) {
 			return new ErrorResult();
 		}
 		return new SuccessResult();
 	}
 	
 	public Result isIdentityNumberExist(String identityNumber) {
-		if(this.candidateDao.findByIdentityNumber(identityNumber)!= null) {
+		if(this.candidateDao.getByIdentityNumber(identityNumber)!= null) {
 			return new ErrorResult();
 		}
 		return new SuccessResult();
 	}
 
-	@Override
-	public Result add(Candidate candidate) throws Exception {
+	//@Override
+	//public Result add(Candidate candidate) throws Exception {
 		// TODO Auto-generated method stub
 		
 		//if(this.isMailExist(candidate.getEmail()).isSuccess() || this.isIdentityNumberExist(candidate.getIdentityNumber()).isSuccess()) {
 			//return new ErrorResult("Failed!");
 		//jnu9gv hdftuxes5}
 		
-		Result checkedPerson;
+		//Result checkedPerson;
 		
-		checkedPerson = mernisCheckService.checkIfRealPerson(candidate);
+		//checkedPerson = mernisCheckService.checkIfRealPerson(candidate);
 		
-		if(!this.mernisCheckService.checkIfRealPerson(candidate).isSuccess()) {
-			return new ErrorResult("Person not a valid");
-		}
+		//if(!this.mernisCheckService.checkIfRealPerson(candidate).isSuccess()) {
+			//return new ErrorResult("Person not a valid");
+		//}
 		
 		//if(!this.emailVerificationsService.verifyEmail(candidate.getEmail()).isSuccess()) {
 			//return new ErrorResult("Check your email!");
 		//}
 		
-		this.candidateDao.saveAndFlush(candidate);
-		return new SuccessResult("Candidate is saved to system.");
+		//this.candidateDao.saveAndFlush(candidate);
+		//return new SuccessResult("Candidate is saved to system.");
+	//}
+
+	@Override
+	public Result add(CandidateDtoForRegister candidateDtoForRegister) throws Exception {
+		// TODO Auto-generated method stub
+		Candidate candidate = candidateDtoConvertCandidate(candidateDtoForRegister);
+		Result checkedPerson;
+		
+		checkedPerson = mernisCheckService.checkIfRealPerson(candidate);
+		if(!this.mernisCheckService.checkIfRealPerson(candidate).isSuccess()) {
+			return new ErrorResult("Person not a valid");
+		}
+		if(!this.emailVerificationsService.verifyEmail(candidate.getEmail()).isSuccess()) {
+			return new ErrorResult("Check your email");
+		}
+		
+		if(this.isIdentityNumberExist(candidate.getIdentityNumber()).isSuccess()) {
+			return new ErrorResult("Identity Number already exist");
+		}
+		if(this.isMailExist(candidate.getEmail()).isSuccess()) {
+			return new ErrorResult("Mail address already exist");
+			
+		}
+		
+		this.candidateDao.save(candidate);
+		
+		return new SuccessResult("Candidate added to system");
+	}
+	
+	private Candidate candidateDtoConvertCandidate(CandidateDtoForRegister candidateDtoForRegister) {
+		Candidate candidate = new Candidate();
+		candidate.setFirstName(candidateDtoForRegister.getFirstName());
+		candidate.setLastName(candidateDtoForRegister.getLastName());
+		candidate.setIdentityNumber(candidateDtoForRegister.getIdentityNumber());
+		candidate.setEmail(candidateDtoForRegister.getEmail());
+		candidate.setBirthYear(candidateDtoForRegister.getBirthYear());
+		candidate.setPassword(candidateDtoForRegister.getPassword());
+		
+		return candidate;
+		
+	}
+
+	@Override
+	public Result deleteById(int user_id) {
+		this.candidateDao.deleteById(user_id);
+		return new SuccessResult("Candidate are removed from system.");
+	}
+
+	@Override
+	public DataResult<Candidate> update(int candidateId, Candidate candidateInfo) {
+		Candidate candidate = this.candidateDao.getById(candidateId);
+		candidate.setFirstName(candidateInfo.getFirstName());
+		candidate.setLastName(candidateInfo.getLastName());
+		candidate.setIdentityNumber(candidateInfo.getIdentityNumber());
+		candidate.setBirthYear(candidateInfo.getBirthYear());
+		candidate.setEmail(candidateInfo.getEmail());
+		candidate.setPassword(candidateInfo.getPassword());
+		
+		this.candidateDao.save(candidate);
+		return new SuccessDataResult<Candidate>(candidate,"Candidate is updated");
 	}
 
 	

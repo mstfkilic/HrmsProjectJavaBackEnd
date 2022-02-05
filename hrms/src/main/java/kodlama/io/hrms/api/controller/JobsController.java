@@ -13,6 +13,7 @@ import kodlama.io.hrms.business.abstracts.JobService;
 import kodlama.io.hrms.core.utilities.results.DataResult;
 import kodlama.io.hrms.core.utilities.results.Result;
 import kodlama.io.hrms.entities.concretes.Job;
+import kodlama.io.hrms.entities.concretes.Dtos.JobPositionDto;
 
 @RestController
 @RequestMapping("/api/jobs")
@@ -29,7 +30,7 @@ public class JobsController {
 		return this.jobService.getAll();
 	}
 	@PostMapping("/add")
-	public Result add(Job job) throws Exception {
-		return this.jobService.add(job);
+	public Result add(JobPositionDto jobPositionDto) throws Exception {
+		return this.jobService.add(jobPositionDto);
 	}
 }

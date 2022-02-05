@@ -10,6 +10,7 @@ import kodlama.io.hrms.entities.concretes.Candidate;
 
 public interface CandidateDao extends JpaRepository<Candidate,Integer> {
 	
-	List<Candidate> findByIdentityNumber(String identityNumber);
-	List<Candidate> findByEmail(String email);
+	List<Candidate> getByIdentityNumber(String identityNumber);
+	List<Candidate> getByEmail(String email);
+	Candidate deleteById (int id);
 }

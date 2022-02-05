@@ -8,5 +8,7 @@ import kodlama.io.hrms.entities.concretes.User;
 
 public interface UserDao extends JpaRepository<User,Integer> {
 
-	List<User>findByEmail(String email);
+	List<User>getByEmail(String email);
+	User deleteById(int id);
+	
 }
